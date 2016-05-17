@@ -1,0 +1,9 @@
+<template>
+  <section>
+    <ul repeat.for="project of projects">
+      <li>
+        <a route-href="route: project; params.bind: { id: project.project_id }">${project.name}</a>
+      </li>
+    </ul>
+  </section>
+</template>
