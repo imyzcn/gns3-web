@@ -27,11 +27,16 @@
         <th>Source</th>
         <th>Destination</th>
         <th>Capturing</th>
+        <th></th>
       </tr>
       <tr repeat.for="link of links">
         <td>${link.source_node.name}</td>
         <td>${link.destination_node.name}</td>
         <td>${link.capturing}</td>
+        <td>
+          <span if.bind="link.capturing == false" click.delegate="start_capture(link)">Start capture</span>
+          <span if.bind="link.capturing == true" click.delegate="stop_capture(link)">Stop capture</span>
+        </td>        
       </tr>
     </table>
   </section>

@@ -26,5 +26,13 @@ export class Project {
   stop(node) {
     node.stop();
   }
+
+  start_capture(link) {
+    link.start_capture();
+  }
+
+  stop_capture(link) {
+    link.stop_capture();
+  }
 }
 

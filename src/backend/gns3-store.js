@@ -12,6 +12,12 @@ class Compute extends Model {
 
 
 class Link extends Model {
+  constructor(attrs, api) {
+    super(attrs, api);
+
+    this.api_url = "projects/" + this.project_id + "/links/" + this.link_id
+  }
+
   update(attrs) {
     super.update(attrs);
     if (this.project) {
@@ -21,6 +27,14 @@ class Link extends Model {
         .then(node => this.destination_node = node);
     }
     return this;
+  }
+
+  start_capture() {
+    this.api.post(this.api_url + "/start_capture");
+  }
+
+  stop_capture() {
+    this.api.post(this.api_url + "/stop_capture");
   }
 }
 
@@ -56,6 +70,7 @@ class Project extends Model {
     super(attrs, api);
 
     this._nodes = undefined;
+    this._links = undefined;
     var self = this;
 
     // Connection to project notifications and websocket processing
@@ -63,28 +78,60 @@ class Project extends Model {
     this.ws.onmessage = function (e) {
       var msg = JSON.parse(e.data);
 
-      if (self._nodes == undefined || msg["action"] == "ping") {
+      if (msg["action"] == "ping") {
         return;
       }
 
-      self._nodes.then(nodes => {
+      if (msg["action"].startsWith("node.") && self._nodes != undefined ) {
+        self._nodes.then(nodes => {
 
-        if (msg["action"] == "node.created") {
-          nodes.push(new Node(msg["event"], self.api));
-          return;
-        }
+          if (msg["action"] == "node.created") {
+            var node = new Node(msg["event"], self.api);
+            node.update({'project': self});
+            nodes.push(node);
+            return;
+          }
 
-        if (msg["action"] == "node.updated") {
-          self.getNode(msg["event"]["node_id"]).then(node => node.update(msg["event"]));
-          return;
-        }
+          if (msg["action"] == "node.updated") {
+            self.getNode(msg["event"]["node_id"]).then(node => node.update(msg["event"]));
+            return;
+          }
 
-        if (msg["action"] == "node.deleted") {
-          self.getNode(msg["event"]["node_id"]).then(node => nodes.splice(nodes.indexOf(node), 1));
-          return;
-        }
-      });
+          if (msg["action"] == "node.deleted") {
+            self.getNode(msg["event"]["node_id"]).then(node => nodes.splice(nodes.indexOf(node), 1));
+            return;
+          }
+        });
+      }
+
+      if (msg["action"].startsWith("link.") && self._links != undefined ) {
+        self._links.then(links => {
+
+          if (msg["action"] == "link.created") {
+            var link = new Link(msg["event"], self.api);
+            link.update({'project': self});
+            links.push(link);
+            return;
+          }
+
+          if (msg["action"] == "link.updated") {
+            self.getLink(msg["event"]["link_id"]).then(link => link.update(msg["event"]));
+            return;
+          }
+
+          if (msg["action"] == "link.deleted") {
+            self.getLink(msg["event"]["link_id"]).then(link => links.splice(links.indexOf(link), 1));
+            return;
+          }
+        });
+      }
+
     };
+  }
+
+  getLink(link_id) {
+    return this.links()
+      .then(links => links.find(link => link["link_id"] == link_id ));
   }
 
   getNode(node_id) {
