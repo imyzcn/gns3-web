@@ -58,9 +58,9 @@ export class Node extends Model {
     this.api.post(this.api_url + "/stop");
   }
 
-  @computedFrom('console_type', 'console')
+  @computedFrom('console_type', 'console', 'console_host')
   get console_url() {
-    return `${this.console_type}://localhost:${this.console}`;
+    return `${this.console_type}://${this.console_host}:${this.console}`;
   }
 }
 
