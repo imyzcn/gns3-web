@@ -14,5 +14,9 @@ export class Compute {
     return this.GNS3Store.getCompute(params.id)
       .then(compute => this.compute = compute)
   }
+
+  save() {
+    this.compute.save();
+  }
 }
 

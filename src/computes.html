@@ -2,7 +2,7 @@
   <section>
     <h2>${heading}</h2>
     <ul repeat.for="compute of computes">
-      <li><a route-href="route: compute; params.bind: { id: compute.compute_id }">${compute.compute_id}</a></li>
+      <li><a route-href="route: compute; params.bind: { id: compute.compute_id }">${compute.name}</a></li>
     </ul>
   </section>
 </template>

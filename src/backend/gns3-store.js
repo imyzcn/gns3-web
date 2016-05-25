@@ -5,8 +5,12 @@ import {computedFrom} from 'aurelia-framework';
 
 
 class Compute extends Model {
+  properties = ['name'];
+
   constructor(attrs, api) {
     super(attrs, api);
+
+    this.api_url = "computes/" + this.compute_id
   }
 }
 
