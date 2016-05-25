@@ -12,4 +12,8 @@ export class Computes {
     return this.GNS3Store.listComputes()
       .then(computes => this.computes = computes)
   }
+
+  delete(node) {
+    node.delete();
+  }
 }

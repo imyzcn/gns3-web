@@ -37,5 +37,15 @@ export class Api {
   put(path, body) {
     return this.http.fetch(path, {method: 'put', body: json(body)})
   }
+
+  delete(path) {
+    return this.http.fetch(path, {method: 'delete'})
+      .then(response => {
+        if (response.status == 204) {
+          return {}
+        }
+        return response.json();
+      });
+  }
 }
 

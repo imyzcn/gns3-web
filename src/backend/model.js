@@ -19,6 +19,11 @@ export class Model {
     return this;
   }
 
+
+  delete() {
+    this.api.delete(this.api_url);
+  }
+
   /**
    * List elements
    *

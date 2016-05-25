@@ -1,8 +1,15 @@
 <template>
   <section>
     <h2>${heading}</h2>
-    <ul repeat.for="compute of computes">
-      <li><a route-href="route: compute; params.bind: { id: compute.compute_id }">${compute.name}</a></li>
-    </ul>
+    <table>
+      <tr repeat.for="compute of computes">
+        <td>
+          <a route-href="route: compute; params.bind: { id: compute.compute_id }">${compute.name}</a>
+        </td>
+        <td>
+            <span class="glyphicon glyphicon-remove-sign" aria-hidden="true" click.delegate="delete(compute)"></span>
+        </td>
+      </tr>
+    </table>
   </section>
 </template>
