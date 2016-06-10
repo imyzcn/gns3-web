@@ -1,8 +1,14 @@
 <template>
-  <svg height="480" width="640">
-    <svg repeat.for="node of nodes">
-        <text x="${node.x + node.label.x}" y="${node.y + node.label.y}" fill="black">${node.name}</text>
-        <rect width="20" height="20" fill="red" x="${node.x}" y="${node.y}"  y="${node.z}" />
+    <div style="height: 100%; width: 100%; border:2px solid #000; overflow: scroll;">
+      <svg height="1000" width="1000">
+        <svg repeat.for="link of links">
+            <line z="${link.source_node.z - 0.5}" x1="${link.source_node.x}" y1="${link.source_node.y}" x2="${link.destination_node.x}" y2="${link.destination_node.y}" style="stroke:rgb(0,0,0);stroke-width:2" />
+        </svg>
+
+        <svg repeat.for="node of nodes">
+            <text x="${node.x + node.label.x}" y="${node.y + node.label.y}" fill="black">${node.name}</text>
+            <rect width="20" height="20" fill="red" x="${node.x}" y="${node.y}"  y="${node.z}" />
+        </svg>
     </svg>
-  </svg>
+    </div>
 </template>
