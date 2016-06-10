@@ -48,8 +48,6 @@ export class Node extends Model {
 
   constructor(attrs, api) {
     super(attrs, api);
-    // Fake X position
-    this["x"] = Math.floor((Math.random() * 200));
 
     this.api_url = "projects/" + this.project_id + "/nodes/" + this.node_id
   }

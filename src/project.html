@@ -9,6 +9,8 @@
       <td>
         <a route-href="route: node; params.bind: { project_id: project.project_id , node_id: node.node_id}">${node.name}</a>
       </td>
+      <td>${node.symbol}</td>
+      <td>Pos: ${node.x} ${node.y} ${node.z}</td>
       <td>${node.status}</td>
       <td>
         <span if.bind="node.status == 'stopped'" class="glyphicon glyphicon-play" aria-hidden="true" click.delegate="start(node)"></span>
