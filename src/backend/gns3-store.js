@@ -75,6 +75,8 @@ class Project extends Model {
     this._links = undefined;
     var self = this;
 
+    this.api_url = "projects/" + this.project_id;
+
     // Connection to project notifications and websocket processing
     this.ws = this.api.websocket('projects/' + this.project_id + '/notifications/ws');
     this.ws.onmessage = function (e) {
@@ -155,6 +157,14 @@ class Project extends Model {
         .then(links => links.map(link => link.update({'project': this})));
     }
     return this._links;
+  }
+
+  open() {
+    this.api.post(this.api_url + "/open");
+  }
+
+  close() {
+    this.api.post(this.api_url + "/close");
   }
 }
 

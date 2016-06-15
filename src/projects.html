@@ -1,9 +1,14 @@
 <template>
-  <section>
-    <ul repeat.for="project of projects">
-      <li>
-        <a route-href="route: project; params.bind: { id: project.project_id }">${project.name}</a>
-      </li>
-    </ul>
+    <section>
+        <table class="table">
+            <tr repeat.for="project of projects">
+                <td><a route-href="route: project; params.bind: { id: project.project_id }">${project.name}</a></td>
+                <td>${project.status}</td>
+                <td>
+                    <span if.bind="project.status == 'closed'" class="glyphicon glyphicon-folder-open" aria-hidden="true" click.delegate="open(project)"></span>
+                    <span if.bind="project.status == 'opened'" class="glyphicon glyphicon-folder-close" aria-hidden="true" click.delegate="close(project)"></span>
+                </td>
+            </tr>
+        </table>
   </section>
 </template>

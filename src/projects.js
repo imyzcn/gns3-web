@@ -12,4 +12,12 @@ export class Projects {
     return this.GNS3Store.listProjects()
       .then(projects => this.projects = projects)
   }
+
+  open(project) {
+    project.open();
+  }
+
+  close(project) {
+    project.close();
+  }
 }
