@@ -9,6 +9,10 @@
             <text x="${node.x + node.label.x}" y="${node.y + node.label.y}" fill="black">${node.name}</text>
             <rect width="20" height="20" fill="red" x="${node.x}" y="${node.y}"  y="${node.z}" />
         </svg>
+
+        <svg repeat.for="shape of shapes">
+          <svg innerHtml.bind="shape.svg" x="${shape.x}" y="${shape.y}" />
+        </svg>
     </svg>
     </div>
 </template>

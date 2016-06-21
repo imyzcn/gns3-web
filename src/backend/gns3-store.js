@@ -15,20 +15,33 @@ class Compute extends Model {
 }
 
 
+class Shape extends Model {
+  constructor(attrs, api) {
+    console.log(attrs);
+    super(attrs, api);
+
+    this.api_url = "projects/" + this.project_id + "/shapes/" + this.shape_id
+  }
+}
+
+
 class Link extends Model {
   constructor(attrs, api) {
     super(attrs, api);
 
+    this.nodes = [];
     this.api_url = "projects/" + this.project_id + "/links/" + this.link_id
   }
 
   update(attrs) {
     super.update(attrs);
     if (this.project) {
-      this.project.getNode(this.nodes[0]['node_id'])
-        .then(node => this.source_node = node);
-      this.project.getNode(this.nodes[1]['node_id'])
-        .then(node => this.destination_node = node);
+      if (this.nodes.length == 2) {
+        this.project.getNode(this.nodes[0]['node_id'])
+          .then(node => this.source_node = node);
+        this.project.getNode(this.nodes[1]['node_id'])
+          .then(node => this.destination_node = node);
+      }
     }
     return this;
   }
@@ -49,7 +62,7 @@ export class Node extends Model {
   constructor(attrs, api) {
     super(attrs, api);
 
-    this.api_url = "projects/" + this.project_id + "/nodes/" + this.node_id
+    this.api_url = "projects/" + this.project_id + "/nodes/" + this.node_id;
   }
 
   start() {
@@ -73,6 +86,7 @@ class Project extends Model {
 
     this._nodes = undefined;
     this._links = undefined;
+    this._shapes = undefined;
     var self = this;
 
     this.api_url = "projects/" + this.project_id;
@@ -130,12 +144,38 @@ class Project extends Model {
         });
       }
 
+       if (msg["action"].startsWith("shape.") && self._shapes != undefined ) {
+        self._shapes.then(shapes => {
+
+          if (msg["action"] == "shape.created") {
+            var shape = new Shape(msg["event"], self.api);
+            shape.update({'project': self});
+            shapes.push(shape);
+            return;
+          }
+
+          if (msg["action"] == "shape.updated") {
+            self.getShape(msg["event"]["shape_id"]).then(shape => shape.update(msg["event"]));
+            return;
+          }
+
+          if (msg["action"] == "shape.deleted") {
+            self.getShape(msg["event"]["shape_id"]).then(shape => shapes.splice(shapes.indexOf(shape), 1));
+            return;
+          }
+        });
+      }
     };
   }
 
   getLink(link_id) {
     return this.links()
       .then(links => links.find(link => link["link_id"] == link_id ));
+  }
+
+  getShape(shape_id) {
+    return this.shapes()
+      .then(shapes => shapes.find(shape => shape["shape_id"] == shape_id ));
   }
 
   getNode(node_id) {
@@ -157,6 +197,14 @@ class Project extends Model {
         .then(links => links.map(link => link.update({'project': this})));
     }
     return this._links;
+  }
+
+  shapes() {
+    if (this._shapes == undefined) {
+      this._shapes = this.list('projects/' + this.project_id + '/shapes', Shape)
+        .then(shapes => shapes.map(shape => shape.update({'project': this})));
+    }
+    return this._shapes;
   }
 
   open() {
