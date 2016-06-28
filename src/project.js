@@ -8,7 +8,7 @@ export class Project {
     this.project = null;
     this.nodes = [];
     this.links = [];
-    this.shapes = [];
+    this.drawings = [];
   }
 
   activate(params) {
@@ -18,8 +18,8 @@ export class Project {
       .then(nodes => this.nodes = nodes)
       .then(nodes => this.project.links())
       .then(links => this.links = links)
-      .then(links => this.project.shapes())
-      .then(shapes => this.shapes = shapes)
+      .then(links => this.project.drawings())
+      .then(drawings => this.drawings = drawings)
   }
 
   start(node) {

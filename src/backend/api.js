@@ -8,9 +8,13 @@ export class Api {
     http.configure(config => {
       config
         .useStandardConfiguration()
-        .withBaseUrl('http://localhost:3080/v2/');
+        .withBaseUrl(this.baseUrl());
     });
     this.http = http;
+  }
+
+  baseUrl() {
+    return 'http://localhost:3080/v2/'
   }
 
   websocket(path) {
