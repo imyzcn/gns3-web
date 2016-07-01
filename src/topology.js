@@ -3,6 +3,6 @@ import {bindable, bindingMode} from 'aurelia-framework';
 export class Topology {
   @bindable({ defaultBindingMode: bindingMode.twoWay }) nodes;
   @bindable({ defaultBindingMode: bindingMode.twoWay }) links;
-  @bindable({ defaultBindingMode: bindingMode.twoWay }) shapes;
+  @bindable({ defaultBindingMode: bindingMode.twoWay }) drawings;
 
 }
