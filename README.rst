@@ -3,6 +3,11 @@ GNS3 WEB
 
 Web GUI for GNS3 2.0 and later.
 
+WARNING EXPERIMENTAL
+"""""""""""""""""""""
+This is not ready, please use the Qt GUI for the moment 
+
+
 Start the dev version without cloning
 """"""""""""""""""""""""""""""""""""""
 
